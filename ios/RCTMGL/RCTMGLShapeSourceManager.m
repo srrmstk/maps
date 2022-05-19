@@ -23,6 +23,7 @@ RCT_EXPORT_VIEW_PROPERTY(shape, NSString)
 RCT_EXPORT_VIEW_PROPERTY(cluster, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(clusterRadius, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(clusterMaxZoomLevel, NSNumber)
+RCT_EXPORT_VIEW_PROPERTY(clusterProperties, NSDictionary)
 RCT_EXPORT_VIEW_PROPERTY(maxZoomLevel, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(buffer, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(tolerance, NSNumber)
@@ -114,7 +115,7 @@ RCT_EXPORT_METHOD(getClusterLeaves:(nonnull NSNumber*)reactTag
 }
 
 RCT_EXPORT_METHOD(getClusterChildren:(nonnull NSNumber*)reactTag
-                  featureJSON:(nonnull NSString*)featureJSON                
+                  featureJSON:(nonnull NSString*)featureJSON
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
@@ -182,7 +183,7 @@ RCT_EXPORT_METHOD(getClusterLeavesById:(nonnull NSNumber*)reactTag
 }
 // Deprecated. Will be removed in 9+ ver.
 RCT_EXPORT_METHOD(getClusterChildrenById:(nonnull NSNumber*)reactTag
-                  clusterId:(nonnull NSNumber *)clusterId                  
+                  clusterId:(nonnull NSNumber *)clusterId
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {

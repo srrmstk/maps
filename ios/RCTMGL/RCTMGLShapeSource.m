@@ -86,6 +86,20 @@ static UIImage * _placeHolderImage;
         options[MGLShapeSourceOptionMaximumZoomLevel] = _maxZoomLevel;
     }
 
+    if (_clusterProperties != nil) {
+        NSMutableDictionary<NSString *, NSArray *> *properties = [NSMutableDictionary new];
+
+        for (NSString *propertyName in _clusterProperties.allKeys) {
+            NSArray<NSExpression *> *expressions = [_clusterProperties objectForKey: propertyName];
+            NSExpression *firstExpression = [NSExpression expressionWithMGLJSONObject:[expressions objectAtIndex: 0]];
+            NSExpression *secondExpression = [NSExpression expressionWithMGLJSONObject:[expressions objectAtIndex: 1]];
+
+            [properties setObject:@[firstExpression, secondExpression] forKey:propertyName];
+        }
+
+        options[MGLShapeSourceOptionClusterProperties] = properties;
+    }
+
     if (_buffer != nil) {
         options[MGLShapeSourceOptionBuffer] = _buffer;
     }
@@ -113,7 +127,7 @@ static UIImage * _placeHolderImage;
     MGLShapeSource *shapeSource = (MGLShapeSource *)self.source;
 
     MGLPointFeature *feature = (MGLPointFeature*)[RCTMGLUtils shapeFromGeoJSON:featureJSON];
- 
+
     return [shapeSource zoomLevelForExpandingCluster:(MGLPointFeatureCluster *)feature];
 }
 
@@ -132,9 +146,9 @@ static UIImage * _placeHolderImage;
 - (nonnull NSArray<id <MGLFeature>> *)getClusterChildren:(nonnull NSString *)featureJSON
 {
     MGLShapeSource *shapeSource = (MGLShapeSource *)self.source;
-    
+
     MGLPointFeature *feature = (MGLPointFeature*)[RCTMGLUtils shapeFromGeoJSON:featureJSON];
-    
+
     MGLPointFeatureCluster * cluster = (MGLPointFeatureCluster *)feature;
     return [shapeSource childrenOfCluster:cluster];
 }
@@ -157,10 +171,10 @@ static UIImage * _placeHolderImage;
     offset:(NSUInteger)offset
 {
     MGLShapeSource *shapeSource = (MGLShapeSource *)self.source;
-    
+
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"cluster_id == %@", clusterId];
     NSArray<id<MGLFeature>> *features = [shapeSource featuresMatchingPredicate:predicate];
-    
+
     MGLPointFeatureCluster * cluster = (MGLPointFeatureCluster *)features[0];
     return [shapeSource leavesOfCluster:cluster offset:offset limit:number];
 }
@@ -169,10 +183,10 @@ static UIImage * _placeHolderImage;
 - (nonnull NSArray<id <MGLFeature>> *)getClusterChildrenById:(nonnull NSNumber *)clusterId
 {
     MGLShapeSource *shapeSource = (MGLShapeSource *)self.source;
-    
+
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"cluster_id == %@", clusterId];
     NSArray<id<MGLFeature>> *features = [shapeSource featuresMatchingPredicate:predicate];
-    
+
     MGLPointFeatureCluster * cluster = (MGLPointFeatureCluster *)features[0];
     return [shapeSource childrenOfCluster:cluster];
 }
